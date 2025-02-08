@@ -18,3 +18,10 @@ cn: Bob
 sn: Bob
 uid: bob
 userPassword: 12345
+
+dn: cn=managers,ou=groups,dc=springframework,dc=org
+objectclass: top
+objectclass: groupOfUniqueNames
+cn: managers
+ou: manager
+uniqueMember: uid=bob,ou=groups,dc=springframework,dc=org

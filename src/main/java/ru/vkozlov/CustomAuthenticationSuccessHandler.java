@@ -20,7 +20,7 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
 	public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 		Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 		
-		Optional<? extends GrantedAuthority> auth = authorities.stream().filter(a -> a.getAuthority().equals(("read"))).findFirst();
+		Optional<? extends GrantedAuthority> auth = authorities.stream().filter(a -> a.getAuthority().equals(("ROLE_MANAGERS"))).findFirst();
 		
 		if(auth.isPresent()) {
 			response.sendRedirect("/hello");

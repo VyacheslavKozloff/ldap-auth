@@ -15,6 +15,14 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class ProjectConfig {
 	
+	private final CustomAuthenticationFailureHandler authenticationFailureHandler;
+	private final CustomAuthenticationSuccessHandler authenticationSuccessHandler;
+	
+	public ProjectConfig(CustomAuthenticationFailureHandler authenticationFailureHandler, CustomAuthenticationSuccessHandler authenticationSuccessHandler) {
+		this.authenticationFailureHandler = authenticationFailureHandler;
+		this.authenticationSuccessHandler = authenticationSuccessHandler;
+	}
+	
 	@Bean
 	public UserDetailsService userDetailsService() {
 		DefaultSpringSecurityContextSource context = new DefaultSpringSecurityContextSource("ldap://127.0.0.1:33389/dc=springframework,dc=org");
@@ -34,9 +42,9 @@ public class ProjectConfig {
 	
 	@Bean
 	public SecurityFilterChain configure(HttpSecurity http) throws Exception {
-		http.formLogin(c -> c.defaultSuccessUrl("/hello", true));
+		http.formLogin(c -> c.successHandler(authenticationSuccessHandler).failureHandler(authenticationFailureHandler));
 		
-		http.authorizeHttpRequests(c -> c.anyRequest().authenticated());
+		http.authorizeHttpRequests(c -> c.anyRequest().hasAuthority("ROLE_MANAGERS"));
 		
 		return http.build();
 	}
